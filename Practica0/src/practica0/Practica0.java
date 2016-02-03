@@ -8,9 +8,11 @@ package practica0;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  *
- * @author admin
+ * @author nicomda
  */
 public class Practica0 {
 
@@ -32,6 +34,7 @@ public class Practica0 {
         }
         switch(optselection){
             case 1:
+                ej1();
                 break;
             case 2:
                 break;
@@ -55,4 +58,48 @@ public class Practica0 {
         System.out.println("\t 4. Ejercicio herencia y sobrecarga");
         System.out.println("\t 0. Salir");
      }
+    public static void ej1() {
+        System.out.println("Introduzca la operación que desea realizar con 2 operandos(+,-,*,/)");
+        String operation=null;
+        String op_regex="([0-9]*)([\\*\\+-\\/])([0-9]*)";
+        float a,b,result;
+        Boolean valid_op = false;
+        do {
+            try {
+                operation = buffer.readLine();
+                System.out.println(operation);
+                if (operation.matches(op_regex)) {
+                    valid_op = true;
+                }
+            } catch (IOException ex) {
+                System.out.println("Introduzca un operando válido(+,-,*,/) entre los 2 números");
+            }
+        } while (!valid_op);
+        Pattern p= Pattern.compile(op_regex);
+        Matcher m= p.matcher(operation);
+        if(m.find()){
+        a=Float.parseFloat(m.group(1));
+        b=Float.parseFloat(m.group(3));
+        switch(m.group(2)){
+            case"*":
+                result=a*b;
+                break;
+            case"+":
+                result=a+b;
+                break;
+            case"-":
+                result=a-b;
+                break;
+            default:
+                result=a/b;
+                break;
+        }
+                
+        System.out.println("El resultado es: "+ result);
+        }
+        else{System.out.println("Error de entrada");}
+        
+        
+
+    }
 }
