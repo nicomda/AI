@@ -8,6 +8,8 @@ package practica0;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -37,6 +39,7 @@ public class Practica0 {
                 ej1();
                 break;
             case 2:
+                ej2();
                 break;
             case 3:
                 break;
@@ -101,5 +104,22 @@ public class Practica0 {
         
         
 
+    }
+    public static void ej2() {
+        System.out.println("Introduce una frase para contar sus palabras.");
+        String sentence="";
+        int counter=0;
+        String regex_space="(\\s)";
+        try {
+            sentence=buffer.readLine();
+        } catch (IOException ex) {
+            System.out.println("Error en la entrada de datos");
+        }
+        Pattern p=Pattern.compile(regex_space);
+        Matcher m= p.matcher(sentence);
+        while(m.find()){
+        counter++;
+        }
+        System.out.println("La frase tiene " + (counter+1) + " palabras");
     }
 }
