@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -52,6 +51,7 @@ public class Practica0 {
                     ej3();
                     break;
                 case 4:
+                    ej4();
                     break;
                 default:
 
@@ -138,18 +138,18 @@ public class Practica0 {
         Pattern p = Pattern.compile(regex_read);
         String file_line = "";
         ArrayList<String> names;
-        names=new ArrayList();
-        int to_module=0;
+        names = new ArrayList();
+        int to_module = 0;
         try {
-            File file=new File("datos.txt");
+            File file = new File("datos.txt");
             Scanner input = new Scanner(file);
             while (input.hasNext()) {
-                    file_line = input.nextLine();
+                file_line = input.nextLine();
                 Matcher m = p.matcher(file_line);
                 m.find();
                 to_module = Integer.parseInt(m.group(1));
-                if ((to_module%2)==0){
-                names.add(m.group(2));
+                if ((to_module % 2) == 0) {
+                    names.add(m.group(2));
                 }
             }
         } catch (Exception ex) {
@@ -164,7 +164,7 @@ public class Practica0 {
             }
             PrintWriter writter;
             writter = new PrintWriter(file);
-            
+
             for (String name : names) {
                 writter.println(name);
             }
@@ -174,5 +174,30 @@ public class Practica0 {
         }
 
         System.out.println("El archivo se ha escrito correctamente");
+    }
+
+    public static void ej4() {
+        System.out.println("¿Quieres crear una cuenta bancaria al 6% TAE?");
+        String choose = "";
+            try {
+                System.out.println("s/n");
+                choose=buffer.readLine();
+            } catch (IOException ex) {
+                System.out.println("Error de introducción");
+            }
+        if (choose.contains("s")) {
+            CuentaAhorros cuenta;
+            double saldo = 0;
+            System.out.println("Introduce saldo inicial de la cuenta:");
+            try {
+                saldo = Double.parseDouble(buffer.readLine());
+                cuenta = new CuentaAhorros(saldo, 6);
+            } catch (IOException ex) {
+                System.out.println("Error en el saldo. Se creará con saldo 0 ");
+                cuenta = new CuentaAhorros();
+            }
+
+        }
+
     }
 }
