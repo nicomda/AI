@@ -34,7 +34,7 @@ public class M16B09
 	
 	}
 	
-        
+        public TestGrid(Grid currentGrid)
 	
 	
 }
