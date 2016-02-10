@@ -14,7 +14,8 @@ public class M16B09
         private int x,y;
         ArrayList <String> visitedGrids;
         private String position;
-        private int move,arraypos;
+        private int move,arraypos,lastmove;
+        
         
         
         
@@ -35,25 +36,27 @@ public class M16B09
             if(!isVisited(currentGrid)){
             visitedGrids.add(position);
             availableMoves(currentGrid);
-            if(possiblemoves.size()>1){
-            move=possiblemoves.remove(possiblemoves.size());}
-            else move=possiblemoves.get(possiblemoves.size());
+            if(possiblemoves.size()>2){
+            move=possiblemoves.remove(possiblemoves.size()-1);}
+            else move=possiblemoves.get(possiblemoves.size()-1);
             casillas.add(possiblemoves);
-            return move;
+            lastmove=move;
+            
             
             }
             else{
             possiblemoves=casillas.get(arraypos);
-            if (possiblemoves.size()>1){
-            move=possiblemoves.remove(possiblemoves.size());
+            if (possiblemoves.size()>2){
+            move=possiblemoves.remove(possiblemoves.size()-1);
             casillas.set(arraypos,possiblemoves);
             }
-            else move=possiblemoves.get(possiblemoves.size());
-            System.out.println(possiblemoves.size());
-            return move;
+            else move=possiblemoves.get(possiblemoves.size()-1);
+            lastmove=move;
             }
-            
-
+            if (possiblemoves.size() ==0){
+                return lastmove;
+            }
+            return move;
             
             
 	}
