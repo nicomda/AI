@@ -7,11 +7,15 @@ import java.util.regex.Pattern;
 public class M16B09
 	extends Mouse				
 {
+        /*Array para guardar el mapa de bettermoves*/
         ArrayList <ArrayList> casillas;
+        /*Array de movimientos posibles, versión inicial sin preferencia, no es completamente funcional*/
         ArrayList <Integer> possiblemoves;
+        /*Array de movimientos posibles y preferencia*/
         ArrayList <Integer> bettermoves;
+        /*Guarda la referencia a la última casilla visitada para establecer como última preferencia por donde vinimos*/
 	private Grid lastGrid;
-        private int x,y;
+        /*Guarda las coordenadas de los Grids visitados*/
         ArrayList <String> visitedGrids;
         private String position;
         private int move,arraypos,lastmove;
@@ -30,7 +34,7 @@ public class M16B09
 	public int move(Grid currentGrid, Cheese cheese)
 	{
             possiblemoves=new ArrayList();
-            arraypos=-1;
+            arraypos=0;
             position=currentGrid.getX()+" "+currentGrid.getY();
             lastGrid=currentGrid;
             if(!isVisited(currentGrid)){
@@ -72,7 +76,9 @@ public class M16B09
 	casillas=new ArrayList();
         visitedGrids=new ArrayList();
 	}
-        
+        /*
+        Comprueba movimientos disponibles
+        */
         public void availableMoves(Grid grid){
             if(grid.canGoDown())possiblemoves.add(DOWN);
             if(grid.canGoUp())possiblemoves.add(UP);
@@ -80,7 +86,7 @@ public class M16B09
             if(grid.canGoRight())possiblemoves.add(RIGHT);
             casillas.add(possiblemoves);
         }
-        
+        /*Comprueba si la casilla ha sido visitada anteriormente*/
         public boolean isVisited(Grid grid){
             for(int x=0;x<visitedGrids.size();x++){
                 if(visitedGrids.get(x).contentEquals(position)){
