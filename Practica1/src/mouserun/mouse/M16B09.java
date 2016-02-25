@@ -1,126 +1,151 @@
-package mouserun.mouse;		
-import mouserun.game.*;		
-import java.util.*;			
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package mouserun.mouse;
+
+import mouserun.game.*;
+import java.util.*;
 
 public class M16B09
-	extends Mouse				
-{
-        /*Array para guardar el mapa de bettermoves*/
-        ArrayList <ArrayList> casillas;
-        /*Array de movimientos posibles, versión inicial sin preferencia, no es completamente funcional*/
-        ArrayList <Integer> possiblemoves;
-        /*Array de movimientos posibles y preferencia*/
-        ArrayList <Integer> bettermoves;
-        /*Guarda la referencia a la última casilla visitada para establecer como última preferencia por donde vinimos*/
-	private Grid lastGrid;
-        /*Guarda las coordenadas de los Grids visitados*/
-        ArrayList <String> visitedGrids;
-        private String position;
-        private int move,arraypos,lastmove;
-        
-        
-        
-        
+        extends Mouse {
+    private ArrayList<Integer> possiblemoves;
+    private int lastMove,move;
+    /*Variable que se rellena en el metodo isVisited para saber la casilla que tenemos*/
+    private int pos_tablero;
+    private ArrayList<casillamod> tablero;
+    
+    public M16B09() {
+        super("Mickey Mouse");
+        tablero=new ArrayList<>();
+        possiblemoves=new ArrayList<>();
+    }
 
-	public M16B09()
-	{
-		super("Mickey Mouse");
-                casillas=new ArrayList();
-                visitedGrids=new ArrayList();
-	}
-	
-	public int move(Grid currentGrid, Cheese cheese)
-	{
-            possiblemoves=new ArrayList();
-            arraypos=0;
-            position=currentGrid.getX()+" "+currentGrid.getY();
-            lastGrid=currentGrid;
-            if(!isVisited(currentGrid)){
-            visitedGrids.add(position);
-            availableMoves(currentGrid);
-            if(possiblemoves.size()>2){
-            move=possiblemoves.remove(possiblemoves.size()-1);}
-            else move=possiblemoves.get(possiblemoves.size()-1);
-            casillas.add(possiblemoves);
-            lastmove=move;
-            
-            
+    @Override
+    public int move(Grid currentGrid, Cheese cheese) {
+        /*Limpiamos array de posibles movimientos*/
+        possiblemoves.clear();
+        pos_tablero=0;
+        /*If para el caso inicial*/
+        if(tablero.isEmpty()){
+        availableMoves(currentGrid);
+        casillamod casilla=new casillamod();
+        casilla.x=currentGrid.getX();
+        casilla.y=currentGrid.getY();
+        casilla.moves=new ArrayList<>();
+        casilla.moves=possiblemoves;
+        System.out.println("Tamaño move instanciado: "+casilla.moves.size());
+        move=casilla.moves.remove(casilla.moves.size()-1);
+        lastMove=move;
+        tablero.add(casilla);
+        }
+        /*Resto de movimientos*/
+        else{
+            if(isVisited(currentGrid)){
+                move=tablero.get(pos_tablero).moves.remove(tablero.get(pos_tablero).moves.size()-1);
+                lastMove=move;
             }
             else{
-            possiblemoves=casillas.get(arraypos);
-            if (possiblemoves.size()>2){
-            move=possiblemoves.remove(possiblemoves.size()-1);
-            casillas.set(arraypos,possiblemoves);
-            }
-            else move=possiblemoves.get(possiblemoves.size()-1);
-            lastmove=move;
-            }
-            if (possiblemoves.size() ==0){
-                return lastmove;
-            }
-            return move;
-            
-            
-	}
-	
-	public void newCheese()
-	{
-	casillas=new ArrayList();
-        visitedGrids=new ArrayList();
-	}
-	
-	public void respawned()
-	{
-	casillas=new ArrayList();
-        visitedGrids=new ArrayList();
-	}
-        /*
-        Comprueba movimientos disponibles
-        */
-        public void availableMoves(Grid grid){
-            if(grid.canGoDown())possiblemoves.add(DOWN);
-            if(grid.canGoUp())possiblemoves.add(UP);
-            if(grid.canGoLeft())possiblemoves.add(LEFT);
-            if(grid.canGoRight())possiblemoves.add(RIGHT);
-            casillas.add(possiblemoves);
-        }
-        /*Comprueba si la casilla ha sido visitada anteriormente*/
-        public boolean isVisited(Grid grid){
-            for(int x=0;x<visitedGrids.size();x++){
-                if(visitedGrids.get(x).contentEquals(position)){
-                    arraypos=x;
-                    return true;
+            availableMoves(currentGrid);
+            casillamod casilla=new casillamod();
+            casilla.x=currentGrid.getX();
+            casilla.y=currentGrid.getY();
+            System.out.println("MOVEMENTS BEFORE REORDER: " + possiblemoves.size());
+            //Colocamos como última preferencia el contrario de por donde vinimos.
+            if(lastMove==RIGHT && possiblemoves.contains(LEFT)){
+                for(int i=0; i<possiblemoves.size();i++){
+                    if(possiblemoves.get(i)==LEFT){
+                            possiblemoves.remove(i);
+                    }
                 }
+                possiblemoves.add(0, LEFT);
+              
+            }
+            else if(lastMove==LEFT && possiblemoves.contains(RIGHT)){
+                for(int i=0; i<possiblemoves.size();i++){
+                    if(possiblemoves.get(i)==RIGHT){
+                            possiblemoves.remove(i);
+                    }
+                }
+                possiblemoves.add(0, RIGHT);
                 
             }
-            return false;
-            
-        }
+            else if(lastMove==UP && possiblemoves.contains(DOWN)){
+                for(int i=0; i<possiblemoves.size();i++){
+                    if(possiblemoves.get(i)==DOWN){
+                            possiblemoves.remove(i);
+                    }
+                }
+                possiblemoves.add(0, DOWN);
+            }
+            else{
+                for(int i=0; i<possiblemoves.size();i++){
+                    if(possiblemoves.get(i)==UP){
+                            possiblemoves.remove(i);
+                    }
+                }
+                possiblemoves.add(0, UP);
+                
+            }
+            casilla.moves=new ArrayList<>();
+            casilla.moves=possiblemoves;
+            move=casilla.moves.remove(casilla.moves.size()-1);
+            lastMove=move;
+            tablero.add(casilla);
+            }
         
-//        public void betterMoves(Grid grid, Cheese cheese){
-//            case
-//            if((grid.getX()-cheese.getX())>=(grid.getY()-cheese.getY())){
-//                if(grid.getX()-cheese.getX()<=0){
-//                    if(grid.canGoRight()){
-//                        bettermoves.add(Mouse.RIGHT);
-//                    }
-//                    
-//                }
-//                else{
-//                    bettermoves.add(Mouse.LEFT);
-//                }
-//            }
-//            else{
-//                if(grid.getY()-cheese.getY()<=0){
-//                 possiblemoves.add(Mouse.UP);
-//                }
-//                else{
-//                    possiblemoves.add(Mouse.DOWN);
-//                }
-//                
-//            }
-//        }
-	
+        
+        }
+        return move;
+
+    }
+
+    @Override
+    public void newCheese() {
+        tablero.clear();
+    }
+
+    @Override
+    public void respawned() {
+        tablero.clear();
+    }
+    /*
+     Comprueba movimientos disponibles
+     */
+
+   public void availableMoves(Grid grid) {
+       if (grid.canGoDown()) {
+           possiblemoves.add(DOWN);
+        }
+        if (grid.canGoUp()) {
+            possiblemoves.add(UP);
+       }
+        if (grid.canGoLeft()) {
+            possiblemoves.add(LEFT);
+        }
+        if (grid.canGoRight()) {
+            possiblemoves.add(RIGHT);
+        }
+        if(possiblemoves.size()==4){
+            possiblemoves.add(BOMB);
+        }
+        System.out.println(possiblemoves.size());
+    }
+    /*Comprueba si la casilla ha sido visitada anteriormente*/
+
+    public boolean isVisited(Grid grid) {
+        
+        for(int i=0;i<tablero.size();i++){
+            if(tablero.get(i).x==grid.getX()&&tablero.get(i).y==grid.getY()){ 
+                pos_tablero=i;
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
+    /*Esta clase es estática porque java no permite declarar de otra forma 2 clases en el mismo archivo,
+    por tanto, lo inicializaremos desde la clase principal, pero no hay posibilidad de proteger los objetos internos*/
+    class casillamod {
+        
+        ArrayList<Integer> moves;
+        int x,y;
+    }
