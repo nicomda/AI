@@ -30,7 +30,6 @@ public class M16B09
         casilla.y=currentGrid.getY();
         casilla.moves=new ArrayList<>();
         casilla.moves=possiblemoves;
-        System.out.println("Tamaño move instanciado: "+casilla.moves.size());
         move=casilla.moves.remove(casilla.moves.size()-1);
         lastMove=move;
         tablero.add(casilla);
@@ -38,15 +37,24 @@ public class M16B09
         /*Resto de movimientos*/
         else{
             if(isVisited(currentGrid)){
-                move=tablero.get(pos_tablero).moves.remove(tablero.get(pos_tablero).moves.size()-1);
+                Random rnd=new Random();
+                move=rnd.nextInt()%4+1;
                 lastMove=move;
+//                System.out.println("HOLA PACO");
+//                casillamod casilla=new casillamod();
+//                casilla.x=currentGrid.getX();
+//                casilla.y=currentGrid.getY();
+//                casilla.moves=tablero.get(pos_tablero).moves;
+//                tablero.remove(pos_tablero);
+//                move=casilla.moves.get(casilla.moves.size()-1);
+//                lastMove=move;
+//                tablero.add(casilla);
             }
             else{
             availableMoves(currentGrid);
             casillamod casilla=new casillamod();
             casilla.x=currentGrid.getX();
             casilla.y=currentGrid.getY();
-            System.out.println("MOVEMENTS BEFORE REORDER: " + possiblemoves.size());
             //Colocamos como última preferencia el contrario de por donde vinimos.
             if(lastMove==RIGHT && possiblemoves.contains(LEFT)){
                 for(int i=0; i<possiblemoves.size();i++){
@@ -125,7 +133,6 @@ public class M16B09
         if(possiblemoves.size()==4){
             possiblemoves.add(BOMB);
         }
-        System.out.println(possiblemoves.size());
     }
     /*Comprueba si la casilla ha sido visitada anteriormente*/
 
