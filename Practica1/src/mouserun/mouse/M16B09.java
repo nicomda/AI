@@ -821,15 +821,12 @@ public class M16B09
         }
         System.out.println("Array normal:" +possiblemoves);
         System.out.println("Array ordenado:"+possiblemoves2);
+        
         if (possiblemoves.contains(BOMB)) {
             possiblemoves2.add(BOMB);
         }
         oppositeMove();
         if (possiblemoves2.contains(lastMove)){
-            /*quitar del array el lastmove*/
-            /*guardar el array*/
-            /*añadir al 0 el lastmove*/
-            /*añadir el array como estaba*/
            possiblemoves2.remove(possiblemoves2.indexOf(lastMove));
            ArrayList<Integer> aux = new ArrayList<>();
            for(int i=0;aux.size()!=possiblemoves2.size();i++){
@@ -926,9 +923,9 @@ public class M16B09
         if (grid.canGoRight()) {
             possiblemoves.add(RIGHT);
         }
-        /*if (possiblemoves.size() == 4) {
+        if (possiblemoves.size() == 4) {
          possiblemoves.add(BOMB);
-         }*/
+         }
     }
     /*Comprueba si la casilla ha sido visitada anteriormente*/
 
