@@ -7,7 +7,7 @@ public class M16B09
         extends Mouse {
 
     private ArrayList<Integer> possiblemoves;
-            ArrayList<Integer> possiblemoves2 = new ArrayList<>();
+    ArrayList<Integer> possiblemoves2;
     private int lastMove, move;
     /*Variable que se rellena en el metodo isVisited para saber la casilla que tenemos*/
     private int pos_tablero = 0;
@@ -18,6 +18,7 @@ public class M16B09
         super("Mickey Mouse");
         tablero = new ArrayList<>();
         possiblemoves = new ArrayList<>();
+        possiblemoves2= new ArrayList<>();
     }
 
     @Override
@@ -38,10 +39,12 @@ public class M16B09
             casilla.y = currentGrid.getY();
             casilla.moves = new ArrayList<>();
             sort(currentGrid, cheese);
-            for (int i = 0; i < possiblemoves.size(); i++) {
-                    casilla.moves.add(possiblemoves.get(i));
-                }
+            for (int i = 0; i < possiblemoves2.size(); i++) {
+                casilla.moves.add(possiblemoves2.get(i));
+            }
+            System.out.println("Movimientos de inicio:" + casilla.moves);
             move = casilla.moves.remove(casilla.moves.size() - 1);
+            System.out.print(("Guardo: " + casilla.moves));
             lastMove = move;
             tablero.add(pos_tablero, casilla);
             pos_tablero++;
@@ -49,7 +52,7 @@ public class M16B09
             if (isVisited(currentGrid)) {
                 casillamod casilla = new casillamod();
                 casilla = tablero.get(pos_tablero);
-                System.out.println("En la casilla nº: " + pos_tablero + " Movimientos: " + casilla.moves + " Nombre: " + casilla);
+                //System.out.println("En la casilla nº: " + pos_tablero + " Movimientos: " + casilla.moves + " Nombre: " + casilla);
                 move = casilla.moves.remove(casilla.moves.size() - 1);
                 lastMove = move;
                 tablero.remove(pos_tablero);
@@ -60,18 +63,18 @@ public class M16B09
                 casilla.x = currentGrid.getX();
                 casilla.y = currentGrid.getY();
 
-                System.out.println("Antes: " + possiblemoves);
+                //System.out.println("Antes: " + possiblemoves);
                 sort(currentGrid, cheese);
-                System.out.println("Despues: " + possiblemoves);
+                //System.out.println("Despues: " + possiblemoves);
                 casilla.moves = new ArrayList<>();
-                for (int i = 0; i < possiblemoves.size(); i++) {
-                    casilla.moves.add(possiblemoves.get(i));
+                for (int i = 0; i < possiblemoves2.size(); i++) {
+                    casilla.moves.add(possiblemoves2.get(i));
                 }
                 move = casilla.moves.remove(casilla.moves.size() - 1);
-                incExploredGrids();
-                System.out.println("Muevo a:"+move);
+                //System.out.println("Muevo a:" + move);
                 lastMove = move;
-                System.out.println("Casilla nº:" + pos_tablero + " Guardo:" + casilla.moves + " Nombre:" + casilla);
+                incExploredGrids();
+                //System.out.println("Casilla nº:" + pos_tablero + " Guardo:" + casilla.moves + " Nombre:" + casilla);
                 tablero.add(pos_tablero, casilla);
                 pos_tablero++;
             }
@@ -85,51 +88,51 @@ public class M16B09
         /*Preferencias*/
         int horizontalPosition = currentGrid.getX() - cheese.getX();
         int verticalPosition = currentGrid.getY() - cheese.getY();
-        int tamaño = possiblemoves.size();
-        if (horizontalPosition >= verticalPosition) {
+        possiblemoves2.clear();
+                if (horizontalPosition >= verticalPosition) {
             /*Si tenemos que ir hacia la derecha*/
             if (horizontalPosition >= 0 && possiblemoves.contains(RIGHT)) {
                 if (verticalPosition >= 0 && possiblemoves.contains(UP)) {
                     if (possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                     if (!possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                 }
                 if (verticalPosition >= 0 && !possiblemoves.contains(UP)) {
                     if (possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                     if (!possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                 }
@@ -137,44 +140,124 @@ public class M16B09
                 if (verticalPosition < 0 && possiblemoves.contains(DOWN)) {
                     if (possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                     if (!possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                 }
                 if (verticalPosition < 0 && !possiblemoves.contains(DOWN)) {
                     if (possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
                         }
                     }
                     if (!possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
+                            possiblemoves2.add(RIGHT);
+                        }
+                    }
+                }
+            }
+            /**
+             * **************************************
+             */
+            if (horizontalPosition >= 0 && !possiblemoves.contains(RIGHT)) {
+                if (verticalPosition >= 0 && possiblemoves.contains(UP)) {
+                    if (possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                }
+                if (verticalPosition >= 0 && !possiblemoves.contains(UP)) {
+                    if (possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                        } else {
+                            System.out.println("ERROR!!!!!!");
+                        }
+                    }
+                }
+
+                if (verticalPosition < 0 && possiblemoves.contains(DOWN)) {
+                    if (possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                }
+                if (verticalPosition < 0 && !possiblemoves.contains(DOWN)) {
+                    if (possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(LEFT)) {
+                            possiblemoves2.add(LEFT);
+                        } else {
+                            System.out.println("ERRORR!!!!!");
                         }
                     }
                 }
@@ -185,45 +268,45 @@ public class M16B09
             if (horizontalPosition < 0 && possiblemoves.contains(LEFT)) {
                 if (verticalPosition >= 0 && possiblemoves.contains(UP)) {
                     if (possiblemoves.contains(DOWN)) {
-                        if (possiblemoves.contains(LEFT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                     if (!possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                 }
                 if (verticalPosition >= 0 && !possiblemoves.contains(UP)) {
                     if (possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                     if (!possiblemoves.contains(DOWN)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                 }
@@ -231,65 +314,536 @@ public class M16B09
                 if (verticalPosition < 0 && possiblemoves.contains(DOWN)) {
                     if (possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                     if (!possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), DOWN);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                 }
                 if (verticalPosition < 0 && !possiblemoves.contains(DOWN)) {
                     if (possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), UP);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
                         }
                     }
                     if (!possiblemoves.contains(UP)) {
                         if (possiblemoves.contains(RIGHT)) {
-                            possiblemoves.add(possiblemoves.size(), RIGHT);
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
                         } else {
-                            possiblemoves.add(possiblemoves.size(), LEFT);
+                            possiblemoves2.add(LEFT);
+                        }
+                    }
+                }
+            }
+
+            /**
+             * *****************
+             */
+            if (horizontalPosition < 0 && !possiblemoves.contains(LEFT)) {
+                if (verticalPosition >= 0 && possiblemoves.contains(UP)) {
+                    if (possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+
+                        } else {
+                            possiblemoves2.add(UP);
+
+                        }
+                    }
+                }
+                if (verticalPosition >= 0 && !possiblemoves.contains(UP)) {
+                    if (possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+
+                        } else {
+                            possiblemoves2.add(DOWN);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(DOWN)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            System.out.println("EROOORRR");
+                        }
+                    }
+                }
+
+                if (verticalPosition < 0 && possiblemoves.contains(DOWN)) {
+                    if (possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+
+                        } else {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+
+                        } else {
+                            possiblemoves2.add(DOWN);
+
+                        }
+                    }
+                }
+                if (verticalPosition < 0 && !possiblemoves.contains(DOWN)) {
+                    if (possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+
+                        } else {
+                            possiblemoves2.add(UP);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(UP)) {
+                        if (possiblemoves.contains(RIGHT)) {
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            System.out.println("ERROOOOR");
                         }
                     }
                 }
             }
             /*AQUI ACABA LA IZQUIERDA*/
         }
+        if (verticalPosition > horizontalPosition) {
+            if (verticalPosition >= 0 && possiblemoves.contains(UP)) {
+                if (horizontalPosition >= 0 && possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                }
+                if (horizontalPosition >= 0 && !possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                }
 
+                if (horizontalPosition < 0 && possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                }
+                if (horizontalPosition < 0 && !possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(UP);
+                        } else {
+                            possiblemoves2.add(UP);
+                        }
+                    }
+                }
+            }
+
+            if (verticalPosition >= 0 && !possiblemoves.contains(UP)) {
+                if (horizontalPosition >= 0 && possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                }
+                if (horizontalPosition >= 0 && !possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+
+                        } else {
+                            System.out.println("EROROOOROR");
+                        }
+                    }
+                }
+
+                if (horizontalPosition < 0 && possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                }
+                if (horizontalPosition < 0 && !possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(DOWN)) {
+                            possiblemoves2.add(DOWN);
+
+                        } else {
+                            System.out.println("EORORORO");
+                        }
+                    }
+                }
+            }
+            if (verticalPosition < 0 && possiblemoves.contains(DOWN)) {
+                if (horizontalPosition >= 0 && possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                }
+                if (horizontalPosition >= 0 && !possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                }
+
+                if (horizontalPosition < 0 && possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                }
+                if (horizontalPosition < 0 && !possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(DOWN);
+                        } else {
+                            possiblemoves2.add(DOWN);
+                        }
+                    }
+                }
+            }
+
+            if (verticalPosition < 0 && !possiblemoves.contains(DOWN)) {
+                if (horizontalPosition >= 0 && possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                }
+                if (horizontalPosition >= 0 && !possiblemoves.contains(RIGHT)) {
+                    if (possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(LEFT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+
+                        } else {
+                            System.out.println("EROROOOROR");
+                        }
+                    }
+                }
+
+                if (horizontalPosition < 0 && possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(LEFT);
+
+                        } else {
+                            possiblemoves2.add(LEFT);
+
+                        }
+                    }
+                }
+                if (horizontalPosition < 0 && !possiblemoves.contains(LEFT)) {
+                    if (possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+                            possiblemoves2.add(RIGHT);
+
+                        } else {
+                            possiblemoves2.add(RIGHT);
+
+                        }
+                    }
+                    if (!possiblemoves.contains(RIGHT)) {
+                        if (possiblemoves.contains(UP)) {
+                            possiblemoves2.add(UP);
+
+                        } else {
+                            System.out.println("EORORORO");
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("Array normal:" +possiblemoves);
+        System.out.println("Array ordenado:"+possiblemoves2);
         if (possiblemoves.contains(BOMB)) {
-            possiblemoves.add(4, BOMB);
+            possiblemoves2.add(BOMB);
         }
         oppositeMove();
-        if (possiblemoves.contains(lastMove)) {
-            int a, b;
-            a = possiblemoves.get(possiblemoves.indexOf(lastMove));
-            b = possiblemoves.get(0);
-            possiblemoves.set(possiblemoves.indexOf(lastMove), b);
-            possiblemoves.set(0, a);
-            System.out.println("/**/");
-        }
-        while(tamaño!=possiblemoves.size()){
-            possiblemoves.remove(0);
+        if (possiblemoves2.contains(lastMove)){
+            /*quitar del array el lastmove*/
+            /*guardar el array*/
+            /*añadir al 0 el lastmove*/
+            /*añadir el array como estaba*/
+           possiblemoves2.remove(possiblemoves2.indexOf(lastMove));
+           ArrayList<Integer> aux = new ArrayList<>();
+           for(int i=0;aux.size()!=possiblemoves2.size();i++){
+               aux.add(possiblemoves2.get(i));
+           }
+           System.out.println("Array aux"+aux);
+           possiblemoves2.clear();
+           possiblemoves2.add(lastMove);
+           System.out.println("Array aux:"+aux);
+           System.out.println("Array possiblemoves2:"+possiblemoves2);
+           for(int i=0;aux.size()+1!=possiblemoves2.size();i++){
+               possiblemoves2.add(aux.get(i));
+           }
+           System.out.println("ARRAY:"+possiblemoves2);
         }
     }
 
