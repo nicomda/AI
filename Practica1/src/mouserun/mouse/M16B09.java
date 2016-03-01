@@ -13,7 +13,9 @@ public class M16B09
     private int pos_tablero = 0;
     private int casillasVisitadas = 0;
     private ArrayList<casillamod> tablero;
-
+    ArrayList<String> posicionesvisitadas = new ArrayList<>();
+    
+    int control =0;
     public M16B09() {
         super("Mickey Mouse");
         tablero = new ArrayList<>();
@@ -25,7 +27,7 @@ public class M16B09
     public long incExploredGrids() {
         return super.incExploredGrids(); //To change body of generated methods, choose Tools | Templates.
     }
-
+   
     @Override
     public int move(Grid currentGrid, Cheese cheese) {
         /*Limpiamos array de posibles movimientos*/
@@ -73,7 +75,12 @@ public class M16B09
                 move = casilla.moves.remove(casilla.moves.size() - 1);
                 //System.out.println("Muevo a:" + move);
                 lastMove = move;
-                incExploredGrids();
+                
+                if(!posicionesvisitadas.contains(casilla.x+""+casilla.y)){
+                    posicionesvisitadas.add(casilla.x+""+casilla.y);
+                    incExploredGrids();
+                }
+                
                 //System.out.println("Casilla nº:" + pos_tablero + " Guardo:" + casilla.moves + " Nombre:" + casilla);
                 tablero.add(pos_tablero, casilla);
                 pos_tablero++;
@@ -899,12 +906,16 @@ public class M16B09
 
     @Override
     public void newCheese() {
-        //tablero.clear();
+        pos_tablero=0;
+        tablero.clear();
+        possiblemoves.clear();
     }
 
     @Override
     public void respawned() {
+        pos_tablero=0;
         tablero.clear();
+        possiblemoves.clear();
     }
     /*
      Comprueba movimientos disponibles
