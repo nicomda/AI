@@ -58,12 +58,68 @@ public class AlgoritmoMiniMax extends Algoritmo{
      */
     public int miniMax(Tablero tablero, int prof, int jugadorActual)
     {        
-        //
-        int movimiento = 1;
-		// ...
+         if (tablero.EsFinalDeJuego())
+            {
+                int value= Heuristica.h2(tablero, playerColor);
+                return value;
+            }
+             if (prof == 0)
+            {
+                int value = Heuristica.h2(tablero, playerColor);
+                return value;
+            }
+            if (!tablero.PuedeJugar(jugadorActual))
+            {
+                int value = miniMax(tablero, prof, -jugadorActual);
+                return value;
+            }
+            ArrayList<Casilla> movimientos = tablero.generarMovimiento(jugadorActual);
+            Casilla mejorMovimiento = null;
+            int mejorValor;
+            if (jugadorActual == this.playerColor)
+                mejorValor = -9999;
+            else
+                mejorValor = 9999;
 
-        // Devolver el valor para el mejor movimiento
-        return movimiento;
+            for (Casilla cas : movimientos)
+            {
+                Tablero tableroActual = tablero.copiarTablero();
+
+                if(jugadorActual == 1)
+                    cas.asignarFichaBlanca();
+                else if (jugadorActual == -1)
+                    cas.asignarFichaNegra();
+                tableroActual.ponerFicha(cas);
+                tableroActual.imprimirTablero();
+
+                int valorActual = miniMax(tableroActual, prof - 1, -jugadorActual);
+
+                // MAX
+                if (jugadorActual == this.playerColor)
+                {
+                    if (valorActual > mejorValor)
+                    {
+                        mejorValor = valorActual;
+                        mejorMovimiento = cas;
+                    }
+                }
+                // MIN
+                else
+                {
+                    if (valorActual < mejorValor)
+                    {
+                        mejorValor = valorActual;
+                        mejorMovimiento = cas;
+                    }
+                }
+            }
+
+            // Hacer el mejor movimiento
+            if (mejorMovimiento != null)
+            {
+                tablero.ponerFicha(mejorMovimiento);
+            }
+            return mejorValor;
+        }
         
     }
-}
