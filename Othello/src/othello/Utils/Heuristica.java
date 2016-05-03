@@ -35,7 +35,6 @@ public class Heuristica {
     public  int h1(Casilla casilla)
     {       
         return weight[casilla.col][casilla.fila];
-    
     }
 
 

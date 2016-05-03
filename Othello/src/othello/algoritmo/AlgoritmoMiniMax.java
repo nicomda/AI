@@ -57,15 +57,9 @@ public class AlgoritmoMiniMax extends Algoritmo{
      * @return
      */
     public int miniMax(Tablero tablero, int prof, int jugadorActual)
-    {        if (tablero.EsFinalDeJuego())
+    {        if (tablero.EsFinalDeJuego()|| prof==0)
             {
                 int value= Heuristica.h2(tablero, playerColor);
-                return value;
-            }
-         
-             if (prof == 0)
-            {
-                int value = Heuristica.h2(tablero, playerColor);
                 return value;
             }
             if (!tablero.PuedeJugar(jugadorActual))
@@ -73,6 +67,7 @@ public class AlgoritmoMiniMax extends Algoritmo{
                 int value = miniMax(tablero, prof, -jugadorActual);
                 return value;
             }
+            
             ArrayList<Casilla> movimientos = tablero.generarMovimiento(jugadorActual);
             Casilla mejorMovimiento = null;
             int mejorValor;

@@ -64,18 +64,12 @@ public class AlgoritmoPodaAlfaBeta extends Algoritmo{
     public int alfaBeta(Tablero tablero, int prof, int jugadorActual, int alfa, int beta)
     {        
 
-	 // Si el juego termina, termina la búsqueda
-        if (tablero.EsFinalDeJuego())
-        {
-            int value= Heuristica.h2(tablero, playerColor);
-            return value;
-        }
-        // Al final del espacio de búsqueda
-        if (prof == 0)
-        {
-            int value = Heuristica.h2(tablero, playerColor);
-            return value;
-        }
+	 // si el juego llega al final o no puede buscar mas
+         if (tablero.EsFinalDeJuego()|| prof==0)
+            {
+                int value= Heuristica.h2(tablero, playerColor);
+                return value;
+            }
 
         // Si este jugador no puede jugar, pasa el turno
         if (!tablero.PuedeJugar(jugadorActual))
@@ -84,13 +78,13 @@ public class AlgoritmoPodaAlfaBeta extends Algoritmo{
             return value;
         }
 
-        // Obtiene la lista de movimientos posibles, ordenado por la mayor cantidad de piezas volteadas
-        ArrayList<Casilla> movimientos = tablero.generarMovimiento(jugadorActual);
+        // cogemos las casillas en las cuales podemos jugar
+        ArrayList<Casilla> casillas = tablero.generarMovimiento(jugadorActual);
         
         // Encontrar el mejor movimiento actual
         Casilla mejorMovimiento = null;
 
-        for (Casilla cas: movimientos)
+        for (Casilla cas: casillas)
         {
             // Copiar el tablero
             Tablero tableroActual = tablero.copiarTablero();
