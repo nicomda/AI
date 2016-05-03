@@ -64,8 +64,79 @@ public class AlgoritmoPodaAlfaBeta extends Algoritmo{
     public int alfaBeta(Tablero tablero, int prof, int jugadorActual, int alfa, int beta)
     {        
 
-		// ...
+	 // Si el juego termina, termina la búsqueda
+        if (tablero.EsFinalDeJuego())
+        {
+            int value= Heuristica.h2(tablero, playerColor);
+            return value;
+        }
+        // Al final del espacio de búsqueda
+        if (prof == 0)
+        {
+            int value = Heuristica.h2(tablero, playerColor);
+            return value;
+        }
 
+        // Si este jugador no puede jugar, pasa el turno
+        if (!tablero.PuedeJugar(jugadorActual))
+        {
+            int value = alfaBeta(tablero, prof, -jugadorActual, alfa, beta);
+            return value;
+        }
+
+        // Obtiene la lista de movimientos posibles, ordenado por la mayor cantidad de piezas volteadas
+        ArrayList<Casilla> movimientos = tablero.generarMovimiento(jugadorActual);
+        
+        // Encontrar el mejor movimiento actual
+        Casilla mejorMovimiento = null;
+
+        for (Casilla cas: movimientos)
+        {
+            // Copiar el tablero
+            Tablero tableroActual = tablero.copiarTablero();
+
+            // Realizar el movimiento seleccionado
+            if(jugadorActual == 1)
+                cas.asignarFichaBlanca();
+            else if (jugadorActual == -1)
+                cas.asignarFichaNegra();
+            tableroActual.ponerFicha(cas);
+            tableroActual.imprimirTablero();
+
+            // Evaluar el tablero
+            int valorActual = alfaBeta(tableroActual, prof - 1, -jugadorActual, alfa, beta);
+
+            // MAX
+            if (jugadorActual == this.playerColor)
+            {
+                if (valorActual > alfa)
+                {
+                    alfa = valorActual;
+                    mejorMovimiento = cas;
+                }
+                // Poda?
+                if (alfa >= beta)
+                    return alfa;
+            }
+            // MIN
+            else
+            {
+                if (valorActual < beta)
+                {
+                    beta = valorActual;
+                    mejorMovimiento = cas;
+                }
+                // Poda?
+                if(alfa >= beta)
+                    return beta;
+            }
+        }
+        // Realizar el mejor movimiento
+        if (mejorMovimiento != null)
+        {
+            tablero.ponerFicha(mejorMovimiento);
+
+        }
         // Retornar el valor para el mejor movimiento
         if (jugadorActual == this.playerColor)
             return alfa;
