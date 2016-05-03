@@ -81,57 +81,57 @@ public class AlgoritmoPodaAlfaBeta extends Algoritmo{
         // cogemos las casillas en las cuales podemos jugar
         ArrayList<Casilla> casillas = tablero.generarMovimiento(jugadorActual);
         
-        // Encontrar el mejor movimiento actual
-        Casilla mejorMovimiento = null;
+        // ahora tenemos que encontrar el mejor movimiento actual
+        Casilla bestMovement = null;
 
         for (Casilla cas: casillas)
         {
-            // Copiar el tablero
-            Tablero tableroActual = tablero.copiarTablero();
+            // se realiza una copia del objeto tablero.
+            Tablero currentTablero = tablero.copiarTablero();
 
-            // Realizar el movimiento seleccionado
+            // se realiza un movimiento en el tablero creado
             if(jugadorActual == 1)
                 cas.asignarFichaBlanca();
             else if (jugadorActual == -1)
                 cas.asignarFichaNegra();
-            tableroActual.ponerFicha(cas);
-            tableroActual.imprimirTablero();
+            currentTablero.ponerFicha(cas);
+            currentTablero.imprimirTablero();
 
-            // Evaluar el tablero
-            int valorActual = alfaBeta(tableroActual, prof - 1, -jugadorActual, alfa, beta);
+            // Se evalua a ver si el movimiento es bueno.
+            int valorActual = alfaBeta(currentTablero, prof - 1, -jugadorActual, alfa, beta);
 
-            // MAX
+            // Maximo
             if (jugadorActual == this.playerColor)
             {
                 if (valorActual > alfa)
                 {
                     alfa = valorActual;
-                    mejorMovimiento = cas;
+                    bestMovement = cas;
                 }
-                // Poda?
+                // Es poda?
                 if (alfa >= beta)
                     return alfa;
             }
-            // MIN
+            // Minimo
             else
             {
                 if (valorActual < beta)
                 {
                     beta = valorActual;
-                    mejorMovimiento = cas;
+                    bestMovement = cas;
                 }
-                // Poda?
+                // Es poda?
                 if(alfa >= beta)
                     return beta;
             }
         }
-        // Realizar el mejor movimiento
-        if (mejorMovimiento != null)
+        // Realizar ahora sí el mejor movimiento disponible.
+        if (bestMovement != null)
         {
-            tablero.ponerFicha(mejorMovimiento);
+            tablero.ponerFicha(bestMovement);
 
         }
-        // Retornar el valor para el mejor movimiento
+        // Devolver el valor para el movimiento
         if (jugadorActual == this.playerColor)
             return alfa;
 

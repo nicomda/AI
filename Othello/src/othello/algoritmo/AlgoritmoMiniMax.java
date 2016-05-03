@@ -56,18 +56,20 @@ public class AlgoritmoMiniMax extends Algoritmo{
      * Nos indica a qué jugador (FICHA_BLANCA ó FICHA_NEGRA) le toca
      * @return
      */
-    public int miniMax(Tablero tablero, int prof, int jugadorActual)
-    {        if (tablero.EsFinalDeJuego()|| prof==0)
+    public int miniMax(Tablero tablero, int prof, int jugadorActual){
+        // Si es final de juego se interpreta la heurística
+        if (tablero.EsFinalDeJuego()|| prof==0)
             {
                 int value= Heuristica.h2(tablero, playerColor);
                 return value;
             }
+        // Si no hay movimientos se interpreta la heurística
             if (!tablero.PuedeJugar(jugadorActual))
             {
                 int value = miniMax(tablero, prof, -jugadorActual);
                 return value;
             }
-            
+            //Proceso para generar el movimiento
             ArrayList<Casilla> movimientos = tablero.generarMovimiento(jugadorActual);
             Casilla mejorMovimiento = null;
             int mejorValor;
@@ -75,21 +77,21 @@ public class AlgoritmoMiniMax extends Algoritmo{
                 mejorValor = -9999;
             else
                 mejorValor = 9999;
-
+             //Se crea otro opjeto de tablero para probar el movimiento
             for (Casilla cas : movimientos)
             {
-                Tablero tableroActual = tablero.copiarTablero();
+                Tablero currentTablero = tablero.copiarTablero();
 
                 if(jugadorActual == 1)
                     cas.asignarFichaBlanca();
                 else if (jugadorActual == -1)
                     cas.asignarFichaNegra();
-                tableroActual.ponerFicha(cas);
-                tableroActual.imprimirTablero();
+                currentTablero.ponerFicha(cas);
+                currentTablero.imprimirTablero();
 
-                int valorActual = miniMax(tableroActual, prof - 1, -jugadorActual);
+                int valorActual = miniMax(currentTablero, prof - 1, -jugadorActual);
 
-                // MAX
+                // Maximo
                 if (jugadorActual == this.playerColor)
                 {
                     if (valorActual > mejorValor)
@@ -98,7 +100,7 @@ public class AlgoritmoMiniMax extends Algoritmo{
                         mejorMovimiento = cas;
                     }
                 }
-                // MIN
+                // Minimo
                 else
                 {
                     if (valorActual < mejorValor)
@@ -109,7 +111,7 @@ public class AlgoritmoMiniMax extends Algoritmo{
                 }
             }
 
-            // Hacer el mejor movimiento
+            // Con el tablero comprobado, ahora sí, hacemos el mejor movimiento disponible
             if (mejorMovimiento != null)
             {
                 tablero.ponerFicha(mejorMovimiento);

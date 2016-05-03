@@ -11,7 +11,7 @@ package othello.Utils;
  */
 public class Heuristica {
 
-/* Heurística basada en esquinas.
+/* Heurística basada en el valor de las esquinas.
      '( ( 120 -20 20 5 5 20 -20 120 ) 
      ( -20 -40 -5 -5 -5 -5 -40 -20 ) 
      ( 20 -5 15 3 3 15 -5 20 ) 
