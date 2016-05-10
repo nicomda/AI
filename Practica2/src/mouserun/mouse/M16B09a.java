@@ -5,20 +5,7 @@ import java.util.*;
 
 public class M16B09a extends Mouse {
 
-    //CLASES ANIDADAS
-    //=============== 
-
-    /* 
-     Las clases definidas sobrecargan los metodos equals y hashcode.   
-     Esto es así dado que ambos son usados como claves en estructuras HashMap.
-     De no sobrecargarse, no se comportarían adecuadamente.
-     */
-    /**
-     * TDA que permite almacenar dos valores, del mismo o distinto tipo.
-     *
-     * @param <A> Tipo del atributo first
-     * @param <B> Tipo del atributo second
-     */
+    /*Hemos creado un tipo de dato abstracto, con el cual trabajar las posiciones*/
     private class Pair<A, B> {
 
         public A first;
@@ -62,8 +49,7 @@ public class M16B09a extends Mouse {
     }
 
     /**
-     * Almacena una posición(x,y) y las direcciones accesibles desde la misma.
-     * Esto último, solo será válido si el nodo está marcado como explored.
+    Almacenamos una casilla y desde donde se puede acceder a ella. Solo sabremos como se accede a ella si está explorada.
      */
     private class mouseNode {
 
@@ -128,30 +114,19 @@ public class M16B09a extends Mouse {
             return "X: " + x + " Y: " + y;
         }
     }
-
-    //=============== 
-    //FIN CLASES ANIDADAS
+    /*Este mapa de Hashes tiene los nodos que hemos visitado en el laberinto guardado como el tipo de dato el cual hemos usado antes*/
     private HashMap<Pair<Integer, Integer>, mouseNode> maze;
-    //Contiene los nodos conocidos del laberinto. 
-    //Usa una posición (x,y) como clave.
-    //Almacenada en un Pair de entero-entero   
 
+    /*Aqui vamos a insertar la sucesión de movimientos 
+     desde la posicion en la que estamos hasta un queso cuando reaparece,
+     solo si la casilla donde esta el queso está visitada
+     */
     private Stack<Integer> camino;
-    //Contiene los movimientos a realizar. Bien para llegar a un Cheese,
-    //o para llegar a una casilla no explorada.
-
-    private int moveCount;  //Cuenta los movimientos. Se reinicia al colocar una bomba.
-    private int bombsLeft;  //Cuenta las bombas que quedan por poner.
-
+    /*Aqui decidiremos si la busqueda es informada o no, depende de si existe un camino hacia el queso o no*/
     private boolean informativeSearch;
 
-    //CONSTRUCTOR
-    //===========
     public M16B09a() {
-        super("Mickey Super Star");
-
-        moveCount = 0;
-        //bombsLeft = 5;
+        super("Mickey Star");
         informativeSearch = false;
         camino = new Stack<>();
         maze = new HashMap<>();
@@ -177,7 +152,7 @@ public class M16B09a extends Mouse {
             maze.put(currentPos, currentNode);
         }
 
-        //En caso de que nos encontremos en la casilla del cheese,
+        //En caso de que encontremos en la casilla del cheese,
         //abandonamos la casilla y volvemos a ella
         if (cheese.getX() == currentNode.x && cheese.getY() == currentNode.y && camino.isEmpty()) {
             if (currentGrid.canGoUp()) {
@@ -197,42 +172,6 @@ public class M16B09a extends Mouse {
                             camino.add(Mouse.RIGHT);
                         }
                     }
-                }
-            }
-        }
-
-        //Comprobamos si quedan bombas
-        if (bombsLeft > 0) {
-            int exitCount = 0;
-            //Almacena la cantidad de direcciones por las que
-            //se puede avanzar, desde el nodo actual.
-
-            if (currentNode.up) {
-                exitCount++;
-            }
-            if (currentNode.down) {
-                exitCount++;
-            }
-            if (currentNode.left) {
-                exitCount++;
-            }
-            if (currentNode.right) {
-                exitCount++;
-            }
-
-            //Según el número de movimientos y el número de salidas, se decide
-            //si colocar, o no, una bomba.
-            if (moveCount > 30 && exitCount > 3) {
-                moveCount = 0;
-                bombsLeft--;
-                return Mouse.BOMB;
-            } else {
-                if (moveCount > 100 && exitCount > 2) {
-                    moveCount = 0;
-                    bombsLeft--;
-                    return Mouse.BOMB;
-                } else {
-                    moveCount++;
                 }
             }
         }
@@ -268,7 +207,7 @@ public class M16B09a extends Mouse {
     public void respawned() {
         camino.clear();
     }
-
+    /*Calculamos el camino usando el algoritmo AStar si podemos*/
     void getCamino(mouseNode rootNode, Pair<Integer, Integer> target) {
         List<Pair<Integer, mouseNode>> candidatos = new ArrayList<>(); //Guarda la profundidad del nodo y el nodo
         HashMap<Pair<Integer, Integer>, mouseNode> anteriores = new HashMap<>();
@@ -290,7 +229,7 @@ public class M16B09a extends Mouse {
             }
         }
 
-        //Si A* seleccionado, pero target inaccesible, empleamos la búsqueda de exploración.
+        //Si A* seleccionado, pero no podemos crear uhn camino hacia el queso, empleamos la búsqueda de exploración.
         if (informativeSearch && !anteriores.containsKey(target)) {
             //Conocemos la posición del queso, pero es inaccesible.
             //El A* no llega a él.
@@ -314,15 +253,7 @@ public class M16B09a extends Mouse {
         }
 
     }
-
-    /**
-     * Emplea la búsqueda A* para hallar un camino entre el nodo rootNode y la
-     * posición target.
-     *
-     * @param rootNode nodo inicial.
-     * @param target posición objetivo.
-     * @param anteriores almacena el nodo antecesor a una posición dada.
-     */
+    /*algoritmo AStar*/
     void busquedaAStar(mouseNode rootNode, Pair<Integer, Integer> target, HashMap<Pair<Integer, Integer>, mouseNode> anteriores) {
         List<Pair<Integer, mouseNode>> abiertos = new LinkedList<>();
         HashMap<Pair<Integer, Integer>, mouseNode> cerrados = new HashMap<>();
@@ -340,7 +271,7 @@ public class M16B09a extends Mouse {
                     break;
                 }
 
-                int curValue = w.first + distanciaManhattam(w.second.getPos(), target);
+                int curValue = w.first + Manhattam(w.second.getPos(), target);
                 if (curValue < min) {
                     min = curValue;
                     minIndex = i;
@@ -417,21 +348,8 @@ public class M16B09a extends Mouse {
             }
         }
     }
-
-    /**
-     *
-     * Realiza una búsqueda en profundidad limitada. Almacenara los antecesores
-     * de cada nodo para poder calcular el camino y manejará una lista de nodos
-     * candidatos, no explorados exclusivamente, que se emplearán en el cálculo
-     * del nodo a devolver.
-     *
-     * @param rootNode Nodo inicial.
-     * @param target Posición objetivo.
-     * @param anteriores Almacena el nodo anterior de cada posición.
-     * @param limite Limite de la busqueda
-     * @return null si no hay casillas objetivo sino, mejor nodo candidato
-     * calculada.
-     */
+    
+    /*metodo para la busqueda de nodos en profundidad*/
     mouseNode busquedaProfundidadLimitada(mouseNode rootNode, Pair<Integer, Integer> target, HashMap<Pair<Integer, Integer>, mouseNode> anteriores, int limite) {
         Stack<Pair<Integer, mouseNode>> abiertos = new Stack<>();
         HashMap<Pair<Integer, Integer>, mouseNode> cerrados = new HashMap<>();
@@ -552,18 +470,12 @@ public class M16B09a extends Mouse {
         return candidatos.get(targetIndex).second;
     }
 
-    int distanciaManhattam(Pair<Integer, Integer> init, Pair<Integer, Integer> target) {
+    /*Distancia Manhattan hacia el queso, esta vez la calculamos con librerias de java*/
+    int Manhattam(Pair<Integer, Integer> init, Pair<Integer, Integer> target) {
         return (Math.abs(target.first - init.first)) + (Math.abs(target.second - init.second));
     }
 
-    /**
-     * Dada una lista de nodos, emplea una función heurística para encontrar el
-     * nodo con menor valor y devuelve su índice.
-     *
-     * @param nodes lista de nodos candidatos
-     * @param target posición objetivo
-     * @return Devuelve el índice de la lista nodes con menor valor.
-     */
+    /*Tomamos el nodo de menor valor, es decir el que menos distancia tiene conforme al queso*/
     private int getMinIndex(List<Pair<Integer, mouseNode>> nodes, Pair<Integer, Integer> target, mouseNode init) {
         if (nodes.isEmpty()) {
             return -1;
@@ -591,30 +503,16 @@ public class M16B09a extends Mouse {
         return minPos;
     }
 
-    /**
-     * El nodo de entrada es evaluado, respecto a target, mediante una función
-     * heurística y se devuelve el resultado
-     *
-     * @param init nodo a calcular
-     * @param target posición objetivo
-     * @return Valor de la función heurística.
-     */
+    /*Metodo para evaluar los nodos según la medida Manhattam anterior*/
     private int getValue(Pair<Integer, mouseNode> init, Pair<Integer, Integer> target) {
 
-        int distTarget = distanciaManhattam(init.second.getPos(), target);
+        int distTarget = Manhattam(init.second.getPos(), target);
         int costeCasilla = init.first;
 
         return costeCasilla * 2 + distTarget;
     }
 
-    /**
-     * Dadas dos posiciones, devuelve la dirección a seguir por el ratón para
-     * llegar de una a otra.
-     *
-     * @param init posición inicial
-     * @param target posición destino
-     * @return Movimiento para ir de init a target.
-     */
+    /*Haremos el movimiento, según la sucesión de movimientos almacenados*/
     private int getDirection(Pair<Integer, Integer> init, Pair<Integer, Integer> target) {
         if (target.second - 1 == init.second) {
             return Mouse.UP;
